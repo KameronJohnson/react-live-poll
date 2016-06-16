@@ -15,6 +15,7 @@ module.exports = {
         loaders: [
                 {   //babel to convert es6 and JSX for the browser.
                     //exclude used with regex so babel doesn't run on everything.
+                    test: /\.jsx?$/,
                     exclude: /(node_modules|server.js)/,
                     loader: 'babel',
                     query:

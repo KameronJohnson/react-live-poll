@@ -1,6 +1,6 @@
 var React = require('react');
-var ReactDom = require('react-dom');
 var io = require('socket.io-client');
+var Header = require('./parts/Header');
 
 var APP = React.createClass({
     
@@ -15,7 +15,11 @@ var APP = React.createClass({
     
     //es6 shorthand of render function
     render() {
-        return(<h1>React is saying hi</h1>);
+        return (
+            <div>
+                <Header title="New React Header" />
+            </div>
+        );
     }
 });
 

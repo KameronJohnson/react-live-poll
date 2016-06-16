@@ -20352,8 +20352,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ReactDom = __webpack_require__(38);
 	var io = __webpack_require__(169);
+	var Header = __webpack_require__(219);
 
 	var APP = React.createClass({
 	    displayName: 'APP',
@@ -20371,9 +20371,9 @@
 	    //es6 shorthand of render function
 	    render() {
 	        return React.createElement(
-	            'h1',
+	            'div',
 	            null,
-	            'React is saying hi'
+	            React.createElement(Header, { title: 'New React Header' })
 	        );
 	    }
 	});
@@ -27992,6 +27992,35 @@
 	};
 
 
+
+/***/ },
+/* 219 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var Header = React.createClass({
+	    displayName: 'Header',
+
+
+	    propTypes: {
+	        title: React.PropTypes.string.isRequired
+	    },
+
+	    render() {
+	        return React.createElement(
+	            'header',
+	            null,
+	            React.createElement(
+	                'h1',
+	                null,
+	                this.props.title
+	            )
+	        );
+	    }
+	});
+
+	module.exports = Header;
 
 /***/ }
 /******/ ]);
