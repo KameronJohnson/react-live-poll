@@ -1,15 +1,19 @@
 {
-  "name": "chat-example",
+  "name": "react-live-poll",
   "version": "0.0.0",
-  "description": "A chat example to showcase how to use `socket.io` with a static `express` server with `async` for control flow.",
+  "description": "A web application that allows speakers to ask questions as audience members answer with live bar graph results. Built with the help of React, Socket.io, Node, Express, D3 and ES6.",
   "main": "server.js",
   "repository": "",
-  "author": "Mostafa Eweda <mo.eweda@gmail.com>",
+  "author": "Kameron Johnson",
   "dependencies": {
     "async": "~0.2.8",
+    "babel-core": "^6.9.1",
+    "babel-loader": "^6.2.4",
+    "babel-preset-react": "^6.5.0",
     "bootstrap": "^3.3.6",
     "express": "^4.13.4",
     "react": "^15.1.0",
-    "socket.io": "~0.9.14"
+    "socket.io": "~0.9.14",
+    "webpack": "^1.13.1"
   }
 }
