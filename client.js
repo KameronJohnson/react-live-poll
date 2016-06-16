@@ -2,7 +2,8 @@
 //This is the first javascript file that will run in the browser.
 
 var React = require('react');
+var ReactDom = require('react-dom');
 var APP = require('./components/APP');
 
 //Renders the APP component into the #react-container in index.html
-React.render(<APP />, document.getElementById('react-container'));
+ReactDom.render(<APP />, document.getElementById('react-container'));
