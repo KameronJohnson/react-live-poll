@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 
 var connections = [];
+var title = 'Default Presentation Title';
 
 //use express middleware to serve static files
 app.use(express.static('./public'));
@@ -21,6 +22,11 @@ io.sockets.on('connection', function(socket) {
     //to make sure socket disconnects from server
     socket.disconnect();
     console.log('Disconnected: %s sockets remaining', connections.length);
+  });
+  
+  //emit welcome event handled by the client
+  socket.emit('welcome', {
+    title: title
   });
   
   connections.push(socket);

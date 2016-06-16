@@ -20362,7 +20362,8 @@
 	    //React method for setting initial state, this is passed to Header component as a prop
 	    getInitialState() {
 	        return {
-	            status: 'disconnected'
+	            status: 'disconnected',
+	            title: ''
 	        };
 	    },
 
@@ -20370,6 +20371,7 @@
 	        this.socket = io('https://react-live-poll-ossomepossum.c9users.io' || 'http://localhost:3000');
 	        this.socket.on('connect', this.connect);
 	        this.socket.on('disconnect', this.disconnect);
+	        this.socket.on('welcome', this.welcome);
 	    },
 
 	    //setting a state with make render() fire again when connected.
@@ -20382,12 +20384,17 @@
 	        this.setState({ status: 'disconnected' });
 	    },
 
+	    //when user is welcomed, they receive a state variable (serverState)
+	    welcome(serverState) {
+	        this.setState({ title: serverState.title });
+	    },
+
 	    //es6 shorthand of render function
 	    render() {
 	        return React.createElement(
 	            'div',
 	            null,
-	            React.createElement(Header, { title: 'New React Header', status: this.state.status })
+	            React.createElement(Header, { title: this.state.title, status: this.state.status })
 	        );
 	    }
 	});
