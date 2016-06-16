@@ -20359,13 +20359,21 @@
 	    displayName: 'APP',
 
 
+	    //React method for setting initial state, this is passed to Header component as a prop
+	    getInitialState() {
+	        return {
+	            status: 'disconnected'
+	        };
+	    },
+
 	    componentWillMount() {
 	        this.socket = io('https://react-live-poll-ossomepossum.c9users.io' || 'http://localhost:3000');
 	        this.socket.on('connect', this.connect);
 	    },
 
+	    //setting a state with make render() fire again when connected.
 	    connect() {
-	        alert('Connected: ' + this.socket.id);
+	        this.setState({ status: 'connected' });
 	    },
 
 	    //es6 shorthand of render function
@@ -20373,7 +20381,7 @@
 	        return React.createElement(
 	            'div',
 	            null,
-	            React.createElement(Header, { title: 'New React Header' })
+	            React.createElement(Header, { title: 'New React Header', status: this.state.status })
 	        );
 	    }
 	});
@@ -28007,14 +28015,31 @@
 	        title: React.PropTypes.string.isRequired
 	    },
 
+	    //React method for returning default properties
+	    getDefaultProps() {
+	        return {
+	            status: 'disconnected'
+	        };
+	    },
+
+	    // Default status is disconnected for connection-status styling, changed in APP
 	    render() {
 	        return React.createElement(
 	            'header',
-	            null,
+	            { className: 'row' },
 	            React.createElement(
-	                'h1',
-	                null,
-	                this.props.title
+	                'div',
+	                { className: 'col-xs-10' },
+	                React.createElement(
+	                    'h1',
+	                    null,
+	                    this.props.title
+	                )
+	            ),
+	            React.createElement(
+	                'div',
+	                { className: 'col-xs-2' },
+	                React.createElement('span', { id: 'connection-status', className: this.props.status })
 	            )
 	        );
 	    }
