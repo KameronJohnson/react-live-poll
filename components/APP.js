@@ -14,11 +14,17 @@ var APP = React.createClass({
     componentWillMount() {
         this.socket = io('https://react-live-poll-ossomepossum.c9users.io' || 'http://localhost:3000');
         this.socket.on('connect', this.connect);
+        this.socket.on('disconnect', this.disconnect);
     },
     
     //setting a state with make render() fire again when connected.
     connect() {
         this.setState({ status: 'connected' });
+    },
+    
+    //as with connect(), this is sent to Header when status becomes disconnected.
+    disconnect() {
+        this.setState({ status: 'disconnected' })
     },
     
     //es6 shorthand of render function
