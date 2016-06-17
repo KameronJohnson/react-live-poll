@@ -56,9 +56,9 @@
 
 	var APP = __webpack_require__(196);
 	var Audience = __webpack_require__(248);
-	var Speaker = __webpack_require__(249);
-	var Board = __webpack_require__(250);
-	var Whoops404 = __webpack_require__(251);
+	var Speaker = __webpack_require__(250);
+	var Board = __webpack_require__(251);
+	var Whoops404 = __webpack_require__(252);
 
 	var routes =
 	//The APP component's children will be what changes, APP is our route handler.
@@ -31327,23 +31327,53 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var Display = __webpack_require__(249);
 
 	var Audience = React.createClass({
-	   displayName: 'Audience',
+	    displayName: 'Audience',
 
-	   render() {
-	      return React.createElement(
-	         'h1',
-	         null,
-	         'Audience'
-	      );
-	   }
+	    render() {
+	        return React.createElement(
+	            'div',
+	            null,
+	            React.createElement(
+	                Display,
+	                { 'if': this.props.status === 'connected' },
+	                React.createElement(
+	                    'h1',
+	                    null,
+	                    'Join the session'
+	                )
+	            )
+	        );
+	    }
 	});
 
 	module.exports = Audience;
 
 /***/ },
 /* 249 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var Display = React.createClass({
+	    displayName: 'Display',
+
+	    render() {
+
+	        return this.props.if ? React.createElement(
+	            'div',
+	            null,
+	            this.props.children
+	        ) : null;
+	    }
+	});
+
+	module.exports = Display;
+
+/***/ },
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -31363,7 +31393,7 @@
 	module.exports = Speaker;
 
 /***/ },
-/* 250 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -31383,7 +31413,7 @@
 	module.exports = Board;
 
 /***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
