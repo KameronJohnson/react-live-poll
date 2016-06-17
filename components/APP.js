@@ -12,8 +12,10 @@ var APP = React.createClass({
         return {
             status: 'disconnected',
             title: '',
+            //member using this current socket, audience member or speaker
             member: {},
-            audience: []
+            audience: [],
+            speaker: {}
         }
     },
     

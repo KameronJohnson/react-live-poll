@@ -5,6 +5,7 @@ var app = express();
 var connections = [];
 var title = 'Default Presentation Title';
 var audience = [];
+var speaker = {};
 
 //use express middleware to serve static files
 app.use(express.static('./public'));
@@ -46,15 +47,25 @@ io.sockets.on('connection', function(socket) {
     var newMember = {
       //new member given socket id
       id: this.id,
-      name: payload.name
+      name: payload.name,
+      type: 'member'
     };
     //joined event fires back to client when new member joins 
     this.emit('joined', newMember);
     audience.push(newMember);
     //when audience changes, broadcast audience events on all sockets.
     io.sockets.emit('audience', audience);
-    
     console.log("Everybody welcome %s to the Audience!", payload.name)
+  });
+  
+  //start the presentation with speaker
+  socket.on('start', function(payload) {
+    speaker.name = payload.name;
+    speaker.id = this.id;
+    speaker.type = speaker;
+    //use joined method from newMember but pass speaker info
+    this.emit('joined', speaker);
+    console.log("Presentation started: '%s' by %s", title, speaker.name);
   });
   
   //emit welcome event handled by the client
