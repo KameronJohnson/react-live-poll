@@ -1,4 +1,5 @@
 var express = require('express');
+var _ = require('underscore');
 var app = express();
 
 var connections = [];
@@ -18,8 +19,22 @@ var io = require('socket.io').listen(server);
 //io.sockets refers to every socket
 io.sockets.on('connection', function(socket) {
 
-//when a socket disconnects, this 1 socket is removed from connections array
+
   socket.once('disconnect', function() {
+    
+    //_.findWhere takes an array, and returns item based on query paramters
+    //this.id is the socket that just disconnected
+    var member = _.findWhere(audience, { id: this.id });
+    
+    //remove this audience member from the audience array
+    if (member) {
+      audience.splice(audience.indexOf(member), 1);
+      //now broadcast to all sockets 
+      io.sockets.emit('audience', audience);
+      console.log("%s has disconnected. %s left in audience.", member.name, audience.length)
+    }
+    
+    //when a socket disconnects, this 1 socket is removed from connections array
     connections.splice(connections.indexOf(socket), 1);
     //to make sure socket disconnects from server
     socket.disconnect();

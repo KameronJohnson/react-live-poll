@@ -12,8 +12,8 @@ var Audience = React.createClass({
                 <Display if={this.props.status === 'connected' }>
                 
                     <Display if={this.props.member.name}>
-                        <h2>Welcome {this.props.member.name} to the Audience</h2>
-                        <p>{this.props.audience.length} audience members connected:</p>
+                        <h2>Welcome {this.props.member.name}!</h2>
+                        <p>{this.props.audience.length} in the audience:</p>
                             <ul className="list-group">
                                 {this.props.audience.map(function(audienceMembers){
                                     return <li className="list-group-item">{audienceMembers.name}</li>;
@@ -23,7 +23,7 @@ var Audience = React.createClass({
                     </Display>
                     
                     <Display if={!this.props.member.name}>
-                        <h1>Join the session</h1>
+                        <h1>Please join the session</h1>
                         <Join emit={this.props.emit} />                    
                     </Display>
 

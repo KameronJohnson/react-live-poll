@@ -31375,7 +31375,7 @@
 	                        null,
 	                        'Welcome ',
 	                        this.props.member.name,
-	                        ' to the Audience'
+	                        '!'
 	                    ),
 	                    React.createElement(
 	                        'p',
