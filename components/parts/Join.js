@@ -6,6 +6,9 @@ var Join = React.createClass({
     
     join() {
         var memberName = React.findDOMNode(this.refs.name).value;
+        
+        //send data back to server.js
+        this.props.emit('join', { name: memberName});
     },
     
     //javascript:void(0) makes it so form doesn't submit

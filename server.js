@@ -24,6 +24,11 @@ io.sockets.on('connection', function(socket) {
     console.log('Disconnected: %s sockets remaining', connections.length);
   });
   
+  //payload is data from join form in Join component
+  socket.on('join', function(payload) {
+    console.log(payload.name)
+  });
+  
   //emit welcome event handled by the client
   socket.emit('welcome', {
     title: title

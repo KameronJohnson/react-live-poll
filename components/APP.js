@@ -22,6 +22,12 @@ var APP = React.createClass({
         this.socket.on('welcome', this.welcome);
     },
     
+    //send data back to the server
+    //eventName is join method and payload is the name from Join component
+    emit(eventName, payload) {
+      this.socket.emit(eventName, payload)  
+    },
+    
     //setting a state with make render() fire again when connected.
     connect() {
         this.setState({ status: 'connected' });
@@ -39,11 +45,12 @@ var APP = React.createClass({
     
     //es6 shorthand of render function
     // ... is JSX spread operator that passes all the states
+    //emit function passed for Join component
     render() {
         return (
             <div>
                 <Header title={this.state.title} status={this.state.status} />
-                <RouteHandler {...this.state}/>
+                <RouteHandler emit={this.emit} {...this.state}/>
             </div>
         );
     }

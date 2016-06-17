@@ -23608,6 +23608,8 @@
 /* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var React = __webpack_require__(1);
 	var Router = __webpack_require__(157);
 	//The Audience, Speaker or Board is RouteHandler
@@ -23634,6 +23636,12 @@
 	        this.socket.on('welcome', this.welcome);
 	    },
 
+	    //send data back to the server
+	    //eventName is join method and payload is the name from Join component
+	    emit(eventName, payload) {
+	        this.socket.emit(eventName, payload);
+	    },
+
 	    //setting a state with make render() fire again when connected.
 	    connect() {
 	        this.setState({ status: 'connected' });
@@ -23651,12 +23659,13 @@
 
 	    //es6 shorthand of render function
 	    // ... is JSX spread operator that passes all the states
+	    //emit function passed for Join component
 	    render() {
 	        return React.createElement(
 	            'div',
 	            null,
 	            React.createElement(Header, { title: this.state.title, status: this.state.status }),
-	            React.createElement(RouteHandler, this.state)
+	            React.createElement(RouteHandler, _extends({ emit: this.emit }, this.state))
 	        );
 	    }
 	});
@@ -31347,7 +31356,7 @@
 	                    null,
 	                    'Join the session'
 	                ),
-	                React.createElement(Join, null)
+	                React.createElement(Join, { emit: this.props.emit })
 	            )
 	        );
 	    }
@@ -31385,32 +31394,35 @@
 	var React = __webpack_require__(1);
 
 	var Join = React.createClass({
-	    displayName: "Join",
+	    displayName: 'Join',
 
 
 	    join() {
 	        var memberName = React.findDOMNode(this.refs.name).value;
+
+	        //send data back to server.js
+	        this.props.emit('join', { name: memberName });
 	    },
 
 	    //javascript:void(0) makes it so form doesn't submit
 	    //onSubmit fires join method above.
 	    render() {
 	        return React.createElement(
-	            "form",
-	            { action: "javascript:void(0)", onSubmit: this.join },
+	            'form',
+	            { action: 'javascript:void(0)', onSubmit: this.join },
 	            React.createElement(
-	                "label",
+	                'label',
 	                null,
-	                "Name"
+	                'Name'
 	            ),
-	            React.createElement("input", { ref: "name",
-	                className: "form-control",
-	                placeholder: "Enter Name",
+	            React.createElement('input', { ref: 'name',
+	                className: 'form-control',
+	                placeholder: 'Enter Name',
 	                required: true }),
 	            React.createElement(
-	                "button",
-	                { className: "btn btn-success" },
-	                "Join"
+	                'button',
+	                { className: 'btn btn-success' },
+	                'Join'
 	            )
 	        );
 	    }
