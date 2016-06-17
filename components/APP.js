@@ -1,4 +1,7 @@
 var React = require('react');
+var Router = require('react-router');
+//The Audience, Speaker or Board is RouteHandler
+var RouteHandler = Router.RouteHandler;
 var io = require('socket.io-client');
 var Header = require('./parts/Header');
 
@@ -39,6 +42,7 @@ var APP = React.createClass({
         return (
             <div>
                 <Header title={this.state.title} status={this.state.status} />
+                <RouteHandler />
             </div>
         );
     }
