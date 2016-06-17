@@ -11,15 +11,18 @@ var APP = React.createClass({
     getInitialState() {
         return {
             status: 'disconnected',
-            title: ''
+            title: '',
+            member: {}
         }
     },
     
+    //listening for events
     componentWillMount() {
         this.socket = io('https://react-live-poll-ossomepossum.c9users.io' || 'http://localhost:3000');
         this.socket.on('connect', this.connect);
         this.socket.on('disconnect', this.disconnect);
         this.socket.on('welcome', this.welcome);
+        this.socket.on('joined', this.joined);
     },
     
     //send data back to the server
@@ -41,6 +44,11 @@ var APP = React.createClass({
     //when user is welcomed, they receive a state variable (serverState)
     welcome(serverState) {
         this.setState({ title: serverState.title})
+    },
+    
+    //change member state when new audience member joins
+    joined(newMember) {
+        this.setState({ member: newMember })
     },
     
     //es6 shorthand of render function

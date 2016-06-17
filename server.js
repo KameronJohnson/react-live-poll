@@ -26,7 +26,14 @@ io.sockets.on('connection', function(socket) {
   
   //payload is data from join form in Join component
   socket.on('join', function(payload) {
-    console.log(payload.name)
+    var newMember = {
+      //new member given socket id
+      id: this.id,
+      name: payload.name
+    };
+    //joined event fires back to client when new member joins 
+    this.emit('joined', newMember);
+    console.log("Everybody welcome %s to the Audience!", payload.name)
   });
   
   //emit welcome event handled by the client
