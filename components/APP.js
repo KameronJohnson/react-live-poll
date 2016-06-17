@@ -36,6 +36,16 @@ var APP = React.createClass({
     
     //setting a state with make render() fire again when connected
     connect() {
+        
+        //if there is a member in sessionStorage, set the member to this value,
+        //otherwise, set member value to null
+        var member = (sessionStorage.newMember) ? JSON.parse(sessionStorage.newMember) : null;
+        
+        //if there is a member, automatically rejoin that member:
+        if (member) {
+            this.emit('join', member);
+        }
+        
         this.setState({ status: 'connected' });
     },
     
@@ -50,7 +60,9 @@ var APP = React.createClass({
     },
     
     //change member state when new audience member joins
+    //save member in browser's session storage
     joined(newMember) {
+        sessionStorage.newMember = JSON.stringify(newMember);
         this.setState({ member: newMember })
     },
     
