@@ -38,11 +38,12 @@ var APP = React.createClass({
     },
     
     //es6 shorthand of render function
+    // ... is JSX spread operator that passes all the states
     render() {
         return (
             <div>
                 <Header title={this.state.title} status={this.state.status} />
-                <RouteHandler />
+                <RouteHandler {...this.state}/>
             </div>
         );
     }
