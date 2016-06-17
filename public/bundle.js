@@ -23626,16 +23626,20 @@
 	        return {
 	            status: 'disconnected',
 	            title: '',
-	            member: {}
+	            member: {},
+	            audience: []
 	        };
 	    },
 
+	    //listening for events
 	    componentWillMount() {
 	        this.socket = io('https://react-live-poll-ossomepossum.c9users.io' || 'http://localhost:3000');
 	        this.socket.on('connect', this.connect);
 	        this.socket.on('disconnect', this.disconnect);
 	        this.socket.on('welcome', this.welcome);
 	        this.socket.on('joined', this.joined);
+	        //when audience event occurs, updateAudience is the event handler
+	        this.socket.on('audience', this.updateAudience);
 	    },
 
 	    //send data back to the server
@@ -23644,12 +23648,12 @@
 	        this.socket.emit(eventName, payload);
 	    },
 
-	    //setting a state with make render() fire again when connected.
+	    //setting a state with make render() fire again when connected
 	    connect() {
 	        this.setState({ status: 'connected' });
 	    },
 
-	    //as with connect(), this is sent to Header when status becomes disconnected.
+	    //as with connect(), this is sent to Header when status becomes disconnected
 	    disconnect() {
 	        this.setState({ status: 'disconnected' });
 	    },
@@ -23662,6 +23666,11 @@
 	    //change member state when new audience member joins
 	    joined(newMember) {
 	        this.setState({ member: newMember });
+	    },
+
+	    //change audience state when audience is updated
+	    updateAudience(newAudience) {
+	        this.setState({ audience: newAudience });
 	    },
 
 	    //es6 shorthand of render function
@@ -31367,6 +31376,23 @@
 	                        'Welcome ',
 	                        this.props.member.name,
 	                        ' to the Audience'
+	                    ),
+	                    React.createElement(
+	                        'p',
+	                        null,
+	                        this.props.audience.length,
+	                        ' audience members connected:'
+	                    ),
+	                    React.createElement(
+	                        'ul',
+	                        { className: 'list-group' },
+	                        this.props.audience.map(function (audienceMembers) {
+	                            return React.createElement(
+	                                'li',
+	                                { className: 'list-group-item' },
+	                                audienceMembers.name
+	                            );
+	                        })
 	                    ),
 	                    React.createElement(
 	                        'p',

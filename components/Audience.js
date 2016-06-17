@@ -13,6 +13,12 @@ var Audience = React.createClass({
                 
                     <Display if={this.props.member.name}>
                         <h2>Welcome {this.props.member.name} to the Audience</h2>
+                        <p>{this.props.audience.length} audience members connected:</p>
+                            <ul className="list-group">
+                                {this.props.audience.map(function(audienceMembers){
+                                    return <li className="list-group-item">{audienceMembers.name}</li>;
+                                })}
+                            </ul>
                         <p>Questions will appear here...</p>
                     </Display>
                     

@@ -3,6 +3,7 @@ var app = express();
 
 var connections = [];
 var title = 'Default Presentation Title';
+var audience = [];
 
 //use express middleware to serve static files
 app.use(express.static('./public'));
@@ -14,6 +15,7 @@ var server = app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", f
 
 var io = require('socket.io').listen(server);
 
+//io.sockets refers to every socket
 io.sockets.on('connection', function(socket) {
 
 //when a socket disconnects, this 1 socket is removed from connections array
@@ -33,6 +35,10 @@ io.sockets.on('connection', function(socket) {
     };
     //joined event fires back to client when new member joins 
     this.emit('joined', newMember);
+    audience.push(newMember);
+    //when audience changes, broadcast audience events on all sockets.
+    io.sockets.emit('audience', audience);
+    
     console.log("Everybody welcome %s to the Audience!", payload.name)
   });
   
