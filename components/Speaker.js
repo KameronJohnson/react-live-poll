@@ -1,6 +1,7 @@
 var React = require('react');
 var Display = require('./parts/Display');
 var JoinSpeaker = require('./parts/JoinSpeaker');
+var Attendance = require('./parts/Attendance');
 
 //if connected, has a name and is the speaker --> Display
 //The JoinSpeaker component uses this.props.emit, so we have to pass the emit function...
@@ -14,7 +15,7 @@ var Speaker = React.createClass({
                     
                     <Display if={this.props.member.name && this.props.member.type === 'speaker'}>
                         <p>Questions</p>
-                        <p>Attendance</p>
+                        <Attendance audience={this.props.audience} />
                     </Display>
                     
                     <Display if={!this.props.member.name}>

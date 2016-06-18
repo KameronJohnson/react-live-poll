@@ -13,12 +13,16 @@ var Audience = React.createClass({
                 
                     <Display if={this.props.member.name}>
                         <h2>Welcome {this.props.member.name}!</h2>
-                        <p>{this.props.audience.length} in the audience:</p>
+                        <div className="col-sm-6">
+                            <p>{this.props.audience.length} in the audience:</p>
+                        </div>
+                        <div className="col-sm-6">
                             <ul className="list-group">
                                 {this.props.audience.map(function(audienceMembers){
-                                    return <li className="list-group-item">{audienceMembers.name}</li>;
+                                    return <li className="list-group-item text-center">{audienceMembers.name}</li>;
                                 })}
                             </ul>
+                        </div>    
                         <p>Questions will appear here...</p>
                     </Display>
                     
