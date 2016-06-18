@@ -64,14 +64,19 @@ io.sockets.on('connection', function(socket) {
     speaker.name = payload.name;
     speaker.id = this.id;
     speaker.type = 'speaker';
+    title = payload.title;
     //use joined method from newMember but pass speaker info
     this.emit('joined', speaker);
+    //broadcast to all sockets title and speaker
+    io.sockets.emit('start', { title: title, speaker: speaker.name});
     console.log("Presentation started: '%s' by %s", title, speaker.name);
   });
   
   //emit welcome event handled by the client
   socket.emit('welcome', {
-    title: title
+    title: title,
+    audience: audience,
+    speaker: speaker.name
   });
   
   connections.push(socket);

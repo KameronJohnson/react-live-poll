@@ -15,7 +15,7 @@ var APP = React.createClass({
             //member using this current socket, audience member or speaker
             member: {},
             audience: [],
-            speaker: {}
+            speaker: ''
         }
     },
     
@@ -24,10 +24,11 @@ var APP = React.createClass({
         this.socket = io('https://react-live-poll-ossomepossum.c9users.io' || 'http://localhost:3000');
         this.socket.on('connect', this.connect);
         this.socket.on('disconnect', this.disconnect);
-        this.socket.on('welcome', this.welcome);
+        this.socket.on('welcome', this.updateState);
         this.socket.on('joined', this.joined);
         //when audience event occurs, updateAudience is the event handler
-        this.socket.on('audience', this.updateAudience)
+        this.socket.on('audience', this.updateAudience);
+        this.socket.on('start', this.updateState);
     },
     
     //send data back to the server
@@ -53,12 +54,12 @@ var APP = React.createClass({
     
     //as with connect(), this is sent to Header when status becomes disconnected
     disconnect() {
-        this.setState({ status: 'disconnected' })
+        this.setState({ status: 'disconnected' });
     },
     
     //when user is welcomed, they receive a state variable (serverState)
-    welcome(serverState) {
-        this.setState({ title: serverState.title})
+    updateState(serverState) {
+        this.setState(serverState);
     },
     
     //change member state when new audience member joins
@@ -74,12 +75,12 @@ var APP = React.createClass({
     },
     
     //es6 shorthand of render function
-    // ... is JSX spread operator that passes all the states
+    // ... is JSX spread operator that passes all the states down as a property
     //emit function passed for Join component
     render() {
         return (
             <div>
-                <Header title={this.state.title} status={this.state.status} />
+                <Header {...this.state} />
                 <RouteHandler emit={this.emit} {...this.state}/>
             </div>
         );

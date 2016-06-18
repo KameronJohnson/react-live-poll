@@ -23629,7 +23629,7 @@
 	            //member using this current socket, audience member or speaker
 	            member: {},
 	            audience: [],
-	            speaker: {}
+	            speaker: ''
 	        };
 	    },
 
@@ -23638,10 +23638,11 @@
 	        this.socket = io('https://react-live-poll-ossomepossum.c9users.io' || 'http://localhost:3000');
 	        this.socket.on('connect', this.connect);
 	        this.socket.on('disconnect', this.disconnect);
-	        this.socket.on('welcome', this.welcome);
+	        this.socket.on('welcome', this.updateState);
 	        this.socket.on('joined', this.joined);
 	        //when audience event occurs, updateAudience is the event handler
 	        this.socket.on('audience', this.updateAudience);
+	        this.socket.on('start', this.updateState);
 	    },
 
 	    //send data back to the server
@@ -23671,8 +23672,8 @@
 	    },
 
 	    //when user is welcomed, they receive a state variable (serverState)
-	    welcome(serverState) {
-	        this.setState({ title: serverState.title });
+	    updateState(serverState) {
+	        this.setState(serverState);
 	    },
 
 	    //change member state when new audience member joins
@@ -23688,13 +23689,13 @@
 	    },
 
 	    //es6 shorthand of render function
-	    // ... is JSX spread operator that passes all the states
+	    // ... is JSX spread operator that passes all the states down as a property
 	    //emit function passed for Join component
 	    render() {
 	        return React.createElement(
 	            'div',
 	            null,
-	            React.createElement(Header, { title: this.state.title, status: this.state.status }),
+	            React.createElement(Header, this.state),
 	            React.createElement(RouteHandler, _extends({ emit: this.emit }, this.state))
 	        );
 	    }
@@ -31325,6 +31326,7 @@
 	    displayName: 'Header',
 
 
+	    //make a string title required
 	    propTypes: {
 	        title: React.PropTypes.string.isRequired
 	    },
@@ -31348,6 +31350,12 @@
 	                    'h1',
 	                    null,
 	                    this.props.title
+	                ),
+	                React.createElement(
+	                    'h3',
+	                    null,
+	                    'Speaker: ',
+	                    this.props.speaker
 	                )
 	            ),
 	            React.createElement(
