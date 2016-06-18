@@ -1,6 +1,7 @@
 //For people to join the presentation and be an audience member.
 
 var React = require('react');
+var Link = require('react-router').Link;
 
 var Join = React.createClass({
     
@@ -21,7 +22,8 @@ var Join = React.createClass({
                         className="form-control"
                         placeholder="Enter Name"
                         required />
-                <button className="btn btn-success">Join</button>
+                <button id="join" className="btn btn-success">Join</button>
+                <Link to="/speaker">Join as Speaker</Link>
             </form>
         )
     }

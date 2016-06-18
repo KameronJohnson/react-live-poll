@@ -63,9 +63,9 @@ var APP = React.createClass({
     
     //change member state when new audience member joins
     //save member in browser's session storage
-    joined(newMember) {
-        sessionStorage.newMember = JSON.stringify(newMember);
-        this.setState({ member: newMember })
+    joined(member) {
+        sessionStorage.member = JSON.stringify(member);
+        this.setState({ member: member })
     },
     
     //change audience state when audience is updated

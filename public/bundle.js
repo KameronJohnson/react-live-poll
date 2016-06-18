@@ -57,8 +57,8 @@
 	var APP = __webpack_require__(196);
 	var Audience = __webpack_require__(248);
 	var Speaker = __webpack_require__(251);
-	var Board = __webpack_require__(252);
-	var Whoops404 = __webpack_require__(253);
+	var Board = __webpack_require__(253);
+	var Whoops404 = __webpack_require__(254);
 
 	var routes =
 	//The APP component's children will be what changes, APP is our route handler.
@@ -23626,8 +23626,10 @@
 	        return {
 	            status: 'disconnected',
 	            title: '',
+	            //member using this current socket, audience member or speaker
 	            member: {},
-	            audience: []
+	            audience: [],
+	            speaker: {}
 	        };
 	    },
 
@@ -23675,9 +23677,9 @@
 
 	    //change member state when new audience member joins
 	    //save member in browser's session storage
-	    joined(newMember) {
-	        sessionStorage.newMember = JSON.stringify(newMember);
-	        this.setState({ member: newMember });
+	    joined(member) {
+	        sessionStorage.member = JSON.stringify(member);
+	        this.setState({ member: member });
 	    },
 
 	    //change audience state when audience is updated
@@ -31457,6 +31459,7 @@
 	//For people to join the presentation and be an audience member.
 
 	var React = __webpack_require__(1);
+	var Link = __webpack_require__(157).Link;
 
 	var Join = React.createClass({
 	    displayName: 'Join',
@@ -31486,8 +31489,13 @@
 	                required: true }),
 	            React.createElement(
 	                'button',
-	                { className: 'btn btn-success' },
+	                { id: 'join', className: 'btn btn-success' },
 	                'Join'
+	            ),
+	            React.createElement(
+	                Link,
+	                { to: '/speaker' },
+	                'Join as Speaker'
 	            )
 	        );
 	    }
@@ -31501,23 +31509,109 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var Display = __webpack_require__(249);
+	var JoinSpeaker = __webpack_require__(252);
 
+	//if connected, has a name and is the speaker --> Display
+	//The JoinSpeaker component uses this.props.emit, so we have to pass the emit function...
+	//...to that component as a property
 	var Speaker = React.createClass({
-	   displayName: 'Speaker',
+	    displayName: 'Speaker',
 
-	   render() {
-	      return React.createElement(
-	         'h1',
-	         null,
-	         'Speaker'
-	      );
-	   }
+	    render() {
+	        return React.createElement(
+	            'div',
+	            null,
+	            React.createElement(
+	                Display,
+	                { 'if': this.props.status === 'connected' },
+	                React.createElement(
+	                    Display,
+	                    { 'if': this.props.member.name && this.props.member.type === 'speaker' },
+	                    React.createElement(
+	                        'p',
+	                        null,
+	                        'Questions'
+	                    ),
+	                    React.createElement(
+	                        'p',
+	                        null,
+	                        'Attendance'
+	                    )
+	                ),
+	                React.createElement(
+	                    Display,
+	                    { 'if': !this.props.member.name },
+	                    React.createElement(
+	                        'h2',
+	                        null,
+	                        'Start Presentation'
+	                    ),
+	                    React.createElement(JoinSpeaker, { emit: this.props.emit })
+	                )
+	            )
+	        );
+	    }
 	});
 
 	module.exports = Speaker;
 
 /***/ },
 /* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var JoinSpeaker = React.createClass({
+	    displayName: 'JoinSpeaker',
+
+
+	    start() {
+	        var speakerName = React.findDOMNode(this.refs.name).value;
+	        var title = React.findDOMNode(this.refs.title).value;
+
+	        //send data back to server.js
+	        this.props.emit('start', { name: speakerName, title: title });
+	    },
+
+	    //javascript:void(0) makes it so form doesn't submit
+	    //onSubmit fires join method above.
+	    render() {
+	        return React.createElement(
+	            'form',
+	            { action: 'javascript:void(0)', onSubmit: this.start },
+	            React.createElement(
+	                'label',
+	                null,
+	                'Name'
+	            ),
+	            React.createElement('input', { ref: 'name',
+	                className: 'form-control',
+	                placeholder: 'Enter Name',
+	                required: true }),
+	            React.createElement(
+	                'label',
+	                null,
+	                'Presentation Title'
+	            ),
+	            React.createElement('input', { ref: 'title',
+	                className: 'form-control',
+	                placeholder: 'Enter Presentation Title',
+	                required: true }),
+	            React.createElement(
+	                'button',
+	                { className: 'btn btn-success' },
+	                'Join'
+	            )
+	        );
+	    }
+
+	});
+
+	module.exports = JoinSpeaker;
+
+/***/ },
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -31537,7 +31631,7 @@
 	module.exports = Board;
 
 /***/ },
-/* 253 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);

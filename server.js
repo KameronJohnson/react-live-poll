@@ -59,10 +59,11 @@ io.sockets.on('connection', function(socket) {
   });
   
   //start the presentation with speaker
+  //save info about speaker
   socket.on('start', function(payload) {
     speaker.name = payload.name;
     speaker.id = this.id;
-    speaker.type = speaker;
+    speaker.type = 'speaker';
     //use joined method from newMember but pass speaker info
     this.emit('joined', speaker);
     console.log("Presentation started: '%s' by %s", title, speaker.name);
