@@ -20,7 +20,6 @@ var io = require('socket.io').listen(server);
 //io.sockets refers to every socket
 io.sockets.on('connection', function(socket) {
 
-
   socket.once('disconnect', function() {
     
     //_.findWhere takes an array, and returns item based on query paramters
@@ -33,6 +32,12 @@ io.sockets.on('connection', function(socket) {
       //now broadcast to all sockets 
       io.sockets.emit('audience', audience);
       console.log("%s has disconnected. %s left in audience.", member.name, audience.length)
+    } //if a speaker leaves... 
+    else if (this.id === speaker.id) {
+      console.log("%s has left. '%s' has been terminated.", speaker.name, title);
+      speaker = {};
+      title = "Default Presentation Title";
+      io.sockets.emit('end', { title: title, speaker: '' });
     }
     
     //when a socket disconnects, this 1 socket is removed from connections array
@@ -68,7 +73,7 @@ io.sockets.on('connection', function(socket) {
     //use joined method from newMember but pass speaker info
     this.emit('joined', speaker);
     //broadcast to all sockets title and speaker
-    io.sockets.emit('start', { title: title, speaker: speaker.name});
+    io.sockets.emit('start', { title: title, speaker: speaker.name });
     console.log("Presentation started: '%s' by %s", title, speaker.name);
   });
   
@@ -81,4 +86,4 @@ io.sockets.on('connection', function(socket) {
   
   connections.push(socket);
   console.log('Connected: %s sockets connected', connections.length);
-})
+});

@@ -12,7 +12,6 @@ var APP = React.createClass({
         return {
             status: 'disconnected',
             title: '',
-            //member using this current socket, audience member or speaker
             member: {},
             audience: [],
             speaker: ''
@@ -28,7 +27,8 @@ var APP = React.createClass({
         this.socket.on('joined', this.joined);
         //when audience event occurs, updateAudience is the event handler
         this.socket.on('audience', this.updateAudience);
-        this.socket.on('start', this.updateState);
+        this.socket.on('start', this.start);
+        this.socket.on('end', this.updateState);
     },
     
     //send data back to the server
@@ -42,11 +42,13 @@ var APP = React.createClass({
         
         //if there is a member in sessionStorage, set the member to this value,
         //otherwise, set member value to null
-        var member = (sessionStorage.newMember) ? JSON.parse(sessionStorage.newMember) : null;
+        var member = (sessionStorage.member) ? JSON.parse(sessionStorage.member) : null;
         
         //if there is a member, automatically rejoin that member:
-        if (member) {
+        if (member && member.type === 'audience') {
             this.emit('join', member);
+        } else if (member && member.type === 'speaker') {
+            this.emit('start', { name: member.name, title: sessionStorage.title });
         }
         
         this.setState({ status: 'connected' });
@@ -54,7 +56,10 @@ var APP = React.createClass({
     
     //as with connect(), this is sent to Header when status becomes disconnected
     disconnect() {
-        this.setState({ status: 'disconnected' });
+        this.setState({ status: 'disconnected',
+                        title: 'disconnected',
+                        speaker: ''
+        });
     },
     
     //when user is welcomed, they receive a state variable (serverState)
@@ -72,6 +77,14 @@ var APP = React.createClass({
     //change audience state when audience is updated
     updateAudience(newAudience) {
         this.setState({ audience: newAudience })
+    },
+    
+    //save presentation title if socket is the speaker in sessionStorage
+    start(presentation) {
+        if (this.state.member.type === 'speaker') {
+            sessionStorage.title = presentation.title;
+        }
+        this.setState(presentation);
     },
     
     //es6 shorthand of render function
