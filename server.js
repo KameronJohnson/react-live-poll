@@ -7,6 +7,8 @@ var title = 'Default Presentation Title';
 var audience = [];
 var speaker = {};
 var questions = require('./questions');
+//start with no question
+var currentQuestion = false;
 
 //use express middleware to serve static files
 app.use(express.static('./public'));
@@ -78,12 +80,19 @@ io.sockets.on('connection', function(socket) {
     console.log("Presentation started: '%s' by %s", title, speaker.name);
   });
   
+  socket.on('ask', function(question) {
+    currentQuestion = question;
+    io.sockets.emit('ask', currentQuestion);
+    console.log("Question asked: '%s'", question.q);
+  })
+  
   //emit welcome event handled by the client
   socket.emit('welcome', {
     title: title,
     audience: audience,
     speaker: speaker.name,
-    questions: questions
+    questions: questions,
+    currentQuestion: currentQuestion
   });
   
   connections.push(socket);

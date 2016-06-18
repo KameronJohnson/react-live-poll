@@ -23629,7 +23629,8 @@
 	            member: {},
 	            audience: [],
 	            speaker: '',
-	            questions: []
+	            questions: [],
+	            currentQuestion: false
 	        };
 	    },
 
@@ -23644,6 +23645,7 @@
 	        this.socket.on('audience', this.updateAudience);
 	        this.socket.on('start', this.start);
 	        this.socket.on('end', this.updateState);
+	        this.socket.on('ask', this.ask);
 	    },
 
 	    //send data back to the server
@@ -23700,6 +23702,10 @@
 	            sessionStorage.title = presentation.title;
 	        }
 	        this.setState(presentation);
+	    },
+
+	    ask(question) {
+	        this.setState({ currentQuestion: question });
 	    },
 
 	    //es6 shorthand of render function
@@ -31407,41 +31413,54 @@
 	                    Display,
 	                    { 'if': this.props.member.name },
 	                    React.createElement(
-	                        'h2',
-	                        null,
-	                        'Welcome ',
-	                        this.props.member.name,
-	                        '!'
-	                    ),
-	                    React.createElement(
-	                        'div',
-	                        { className: 'col-sm-6' },
+	                        Display,
+	                        { 'if': !this.props.currentQuestion },
+	                        React.createElement(
+	                            'h2',
+	                            null,
+	                            'Welcome ',
+	                            this.props.member.name,
+	                            '!'
+	                        ),
+	                        React.createElement(
+	                            'div',
+	                            { className: 'col-sm-6' },
+	                            React.createElement(
+	                                'p',
+	                                null,
+	                                this.props.audience.length,
+	                                ' in the audience:'
+	                            )
+	                        ),
+	                        React.createElement(
+	                            'div',
+	                            { className: 'col-sm-6' },
+	                            React.createElement(
+	                                'ul',
+	                                { className: 'list-group' },
+	                                this.props.audience.map(function (audienceMembers) {
+	                                    return React.createElement(
+	                                        'li',
+	                                        { className: 'list-group-item text-center' },
+	                                        audienceMembers.name
+	                                    );
+	                                })
+	                            )
+	                        ),
 	                        React.createElement(
 	                            'p',
 	                            null,
-	                            this.props.audience.length,
-	                            ' in the audience:'
+	                            'Questions will appear here...'
 	                        )
 	                    ),
 	                    React.createElement(
-	                        'div',
-	                        { className: 'col-sm-6' },
+	                        Display,
+	                        { 'if': this.props.currentQuestion },
 	                        React.createElement(
-	                            'ul',
-	                            { className: 'list-group' },
-	                            this.props.audience.map(function (audienceMembers) {
-	                                return React.createElement(
-	                                    'li',
-	                                    { className: 'list-group-item text-center' },
-	                                    audienceMembers.name
-	                                );
-	                            })
+	                            'h2',
+	                            null,
+	                            this.props.currentQuestion.q
 	                        )
-	                    ),
-	                    React.createElement(
-	                        'p',
-	                        null,
-	                        'Questions will appear here...'
 	                    )
 	                ),
 	                React.createElement(
@@ -31560,7 +31579,7 @@
 	                React.createElement(
 	                    Display,
 	                    { 'if': this.props.member.name && this.props.member.type === 'speaker' },
-	                    React.createElement(Questions, { questions: this.props.questions }),
+	                    React.createElement(Questions, { questions: this.props.questions, emit: this.props.emit }),
 	                    React.createElement(Attendance, { audience: this.props.audience })
 	                ),
 	                React.createElement(
@@ -31715,13 +31734,17 @@
 	    displayName: 'Questions',
 
 
+	    ask(question) {
+	        this.props.emit('ask', question);
+	    },
+
 	    addQuestion(question, i) {
 	        return React.createElement(
 	            'div',
 	            { key: i, className: 'col-xs-12 col-sm-6 col-md-3' },
 	            React.createElement(
 	                'span',
-	                null,
+	                { onClick: this.ask.bind(null, question) },
 	                question.q
 	            )
 	        );
