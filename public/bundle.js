@@ -23705,6 +23705,7 @@
 	    },
 
 	    ask(question) {
+	        sessionStorage.answer = ''; //clear answers for new question
 	        this.setState({ currentQuestion: question });
 	    },
 
@@ -31457,7 +31458,7 @@
 	                    React.createElement(
 	                        Display,
 	                        { 'if': this.props.currentQuestion },
-	                        React.createElement(Ask, { question: this.props.currentQuestion })
+	                        React.createElement(Ask, { question: this.props.currentQuestion, emit: this.props.emit })
 	                    )
 	                ),
 	                React.createElement(
@@ -31555,6 +31556,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var Display = __webpack_require__(249);
 
 	var Ask = React.createClass({
 	    displayName: 'Ask',
@@ -31562,7 +31564,8 @@
 
 	    getInitialState() {
 	        return {
-	            choices: []
+	            choices: [],
+	            answer: undefined
 	        };
 	    },
 
@@ -31580,7 +31583,19 @@
 	    setUpChoices() {
 	        var choices = Object.keys(this.props.question);
 	        choices.shift();
-	        this.setState({ choices: choices });
+	        this.setState({
+	            choices: choices,
+	            answer: sessionStorage.answer
+	        });
+	    },
+
+	    select(choice) {
+	        this.setState({ answer: choice });
+	        sessionStorage.answer = choice;
+	        this.props.emit('answer', {
+	            question: this.props.question,
+	            choice: choice
+	        });
 	    },
 
 	    //for map function, index which question to display
@@ -31588,7 +31603,9 @@
 	        var buttonTypes = ['primary', 'success', 'warning', 'danger'];
 	        return React.createElement(
 	            'button',
-	            { key: i, className: "col-xs-12 col-sm-6 col-md-3 btn btn-" + buttonTypes[i] },
+	            { key: i,
+	                className: "col-xs-12 col-sm-6 col-md-3 btn btn-" + buttonTypes[i],
+	                onClick: this.select.bind(null, choice) },
 	            choice,
 	            ': ',
 	            this.props.question[choice]
@@ -31600,14 +31617,33 @@
 	            'div',
 	            { id: 'currentQuestion' },
 	            React.createElement(
-	                'h2',
-	                null,
-	                this.props.question.q
+	                Display,
+	                { 'if': this.state.answer },
+	                React.createElement(
+	                    'h3',
+	                    null,
+	                    'You answered: ',
+	                    this.state.answer
+	                ),
+	                React.createElement(
+	                    'p',
+	                    null,
+	                    this.props.question[this.state.answer]
+	                )
 	            ),
 	            React.createElement(
-	                'div',
-	                { className: 'row' },
-	                this.state.choices.map(this.addChoiceButton)
+	                Display,
+	                { 'if': !this.state.answer },
+	                React.createElement(
+	                    'h2',
+	                    null,
+	                    this.props.question.q
+	                ),
+	                React.createElement(
+	                    'div',
+	                    { className: 'row' },
+	                    this.state.choices.map(this.addChoiceButton)
+	                )
 	            )
 	        );
 	    }

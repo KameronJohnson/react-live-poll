@@ -90,7 +90,9 @@ var APP = React.createClass({
         this.setState(presentation);
     },
     
+    
     ask(question) {
+        sessionStorage.answer = ''; //clear answers for new question
         this.setState({ currentQuestion: question});  
     },
     

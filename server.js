@@ -62,7 +62,7 @@ io.sockets.on('connection', function(socket) {
       //new member given socket id
       id: this.id,
       name: payload.name,
-      type: 'member'
+      type: 'audience'
     };
     //joined event fires back to client when new member joins 
     this.emit('joined', newMember);
@@ -88,9 +88,17 @@ io.sockets.on('connection', function(socket) {
   
   socket.on('ask', function(question) {
     currentQuestion = question;
+    //clear out results from previous question
+    results = {a:0, b:0, c:0, d:0};
     io.sockets.emit('ask', currentQuestion);
     console.log("Question asked: '%s'", question.q);
-  })
+  });
+  
+  //gather answer from audience, increment that value
+  socket.on('answer', function(payload) {
+    results[payload.choice]++;
+    console.log("Answer: '%s' - %j", payload.choice, results);
+  });
   
   //emit welcome event handled by the client
   socket.emit('welcome', {
