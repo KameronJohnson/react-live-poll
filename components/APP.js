@@ -16,7 +16,8 @@ var APP = React.createClass({
             audience: [],
             speaker: '',
             questions: [],
-            currentQuestion: false
+            currentQuestion: false,
+            results: {}
         }
     },
     
@@ -32,6 +33,7 @@ var APP = React.createClass({
         this.socket.on('start', this.start);
         this.socket.on('end', this.updateState);
         this.socket.on('ask', this.ask)
+        this.socket.on('results', this.updateResults);
     },
     
     //send data back to the server
@@ -90,10 +92,13 @@ var APP = React.createClass({
         this.setState(presentation);
     },
     
-    
     ask(question) {
         sessionStorage.answer = ''; //clear answers for new question
         this.setState({ currentQuestion: question});  
+    },
+    
+    updateResults(data) {
+        this.setState({ results: data });
     },
     
     //es6 shorthand of render function

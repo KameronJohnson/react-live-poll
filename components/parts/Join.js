@@ -24,6 +24,7 @@ var Join = React.createClass({
                         required />
                 <button id="join" className="btn btn-success">Join</button>
                 <Link to="/speaker">Join as Speaker</Link>
+                <Link to="/board">Board results</Link>
             </form>
         )
     }

@@ -94,9 +94,9 @@ io.sockets.on('connection', function(socket) {
     console.log("Question asked: '%s'", question.q);
   });
   
-  //gather answer from audience, increment that value
   socket.on('answer', function(payload) {
-    results[payload.choice]++;
+    results[payload.choice]++;   //gather answer from audience, increment that value
+    io.sockets.emit('results', results); //get answer data from server to client
     console.log("Answer: '%s' - %j", payload.choice, results);
   });
   
@@ -106,7 +106,8 @@ io.sockets.on('connection', function(socket) {
     audience: audience,
     speaker: speaker.name,
     questions: questions,
-    currentQuestion: currentQuestion
+    currentQuestion: currentQuestion,
+    results: results
   });
   
   connections.push(socket);
