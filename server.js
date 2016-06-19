@@ -9,6 +9,12 @@ var speaker = {};
 var questions = require('./questions');
 //start with no question
 var currentQuestion = false;
+var results = {
+  a: 0,
+  b: 0,
+  c: 0,
+  d: 0
+};
 
 //use express middleware to serve static files
 app.use(express.static('./public'));

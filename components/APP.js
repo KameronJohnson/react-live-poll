@@ -74,12 +74,12 @@ var APP = React.createClass({
     //save member in browser's session storage
     joined(member) {
         sessionStorage.member = JSON.stringify(member);
-        this.setState({ member: member })
+        this.setState({ member: member });
     },
     
     //change audience state when audience is updated
     updateAudience(newAudience) {
-        this.setState({ audience: newAudience })
+        this.setState({ audience: newAudience });
     },
     
     //save presentation title if socket is the speaker in sessionStorage
@@ -101,7 +101,7 @@ var APP = React.createClass({
         return (
             <div>
                 <Header {...this.state} />
-                <RouteHandler emit={this.emit} {...this.state}/>
+                <RouteHandler emit={this.emit} {...this.state} />
             </div>
         );
     }
