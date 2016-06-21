@@ -94,7 +94,10 @@ var APP = React.createClass({
     
     ask(question) {
         sessionStorage.answer = ''; //clear answers for new question
-        this.setState({ currentQuestion: question});  
+        this.setState({ 
+            currentQuestion: question,
+            results: {a:0, b:0, c:0, d:0}
+        });  
     },
     
     updateResults(data) {

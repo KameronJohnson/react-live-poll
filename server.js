@@ -96,7 +96,7 @@ io.sockets.on('connection', function(socket) {
   
   socket.on('answer', function(payload) {
     results[payload.choice]++;   //gather answer from audience, increment that value
-    io.sockets.emit('results', results); //get answer data from server to client
+    io.sockets.emit('results', results); //pass results object, get answer data from server to client
     console.log("Answer: '%s' - %j", payload.choice, results);
   });
   
